@@ -2,26 +2,37 @@
 import * as pkgUp from 'pkg-up';
 import {
   getDependencies,
-  isPackageExisting,
+  packageExists,
   installPackages,
 } from './npmUtils';
+import * as path from 'path';
 
-const blackList = new Set([
+const pkgBlackList = new Set([
   '@types/typescript',
 ]);
 
 
 (async () => {
-  const dependancies = getDependencies(require(await pkgUp()));
-  const typings = dependancies
+  const pkgPath = await pkgUp();
+  if (!pkgPath) {
+    throw 'Not in a npm project directory';
+  }
+  const projectPath = path.dirname(pkgPath);
+  const dependancies = getDependencies(require(pkgPath));
+  let typesPackages = dependancies
     .filter(dep => !/^@types\//.test(dep))
     .map(dep => `@types/${dep}`)
     .filter(dep => dependancies.indexOf(dep) < 0)
-    .filter(dep => !blackList.has(dep));
-  const existingTypings = (await Promise.all(
-    typings.map(dep => isPackageExisting(dep).then(b => b && dep)),
+    .filter(dep => !pkgBlackList.has(dep));
+  
+  // filter out packages that does not exist
+  typesPackages = (await Promise.all(
+    typesPackages.map(dep => packageExists(dep).then(b => b && dep)),
   )).filter(dep => dep);
-  if (existingTypings.length) {
-    installPackages(existingTypings);
+  
+  if (typesPackages.length) {
+    installPackages(typesPackages, projectPath);
   }
-})()
+})().catch((error: any) => {
+  console.error('Error:', error);
+})

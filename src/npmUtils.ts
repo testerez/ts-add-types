@@ -1,5 +1,7 @@
 import * as childProcess from 'child_process';
 import * as https from 'https';
+import * as path from 'path';
+import * as fs from 'fs';
 
 export const getDependencies = (packageJson: any) => (
   Object.keys({
@@ -8,17 +10,18 @@ export const getDependencies = (packageJson: any) => (
   })
 );
 
-export const installPackages = (packages: string[]) => {
+export const installPackages = (packages: string[], projectPath: string) => {
+  const useYarn = shouldUseYarn(projectPath);
   childProcess.execSync(
-    `npm i -D ${packages.join(' ')}`,
-    { stdio: [0, 1, 2] },
+    `${useYarn ? 'yarn add' : 'npm i'} ${packages.join(' ')}`,
+    { stdio: [0, 1, 2], cwd: projectPath },
   );
 }
 
 /**
  * Check if a package exist on npmjs.com. It's faster than using npm CLI
  */
-export const isPackageExisting = (packageName: string) => (
+export const packageExists = (packageName: string) => (
   new Promise(resolve => {
     https.get({
       host: 'www.npmjs.com',
@@ -36,4 +39,17 @@ export const isPackageExisting = (packageName: string) => (
       }
     })
   })
+);
+
+export const isYarnInstalled = () => {
+  try {
+    childProcess.execSync('yarn --version');
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+export const shouldUseYarn = (projectPath: string) => (
+  fs.existsSync(path.join(projectPath, 'yarn.lock')) && isYarnInstalled()
 );

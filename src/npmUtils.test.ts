@@ -1,16 +1,16 @@
-import {isPackageExisting} from './npmUtils';
+import {packageExists} from './npmUtils';
 
 
 describe('npmUtils', () => {
   describe('isPackageExisting', () => {
     it('exists', async() => {
-      expect(await isPackageExisting('react')).toBe(true);
+      expect(await packageExists('react')).toBe(true);
     });
     it('exists @types', async() => {
-      expect(await isPackageExisting('@types/react')).toBe(true);
+      expect(await packageExists('@types/react')).toBe(true);
     });
     it('does not exist', async() => {
-      expect(await isPackageExisting('this-does-not-exist')).toBe(false);
+      expect(await packageExists('this-does-not-exist')).toBe(false);
     });
   })
 })
