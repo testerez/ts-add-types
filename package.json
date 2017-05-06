@@ -1,6 +1,6 @@
 {
   "name": "ts-add-types",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Get typescript definitions for all your dependancies",
   "main": "dist/index.js",
   "repository": "https://github.com/testerez/ts-add-types",
