@@ -15,7 +15,7 @@
     "build": "rm -rf ./dist && tsc -p .",
     "deploy": "npm run build && npm publish",
     "test": "jest",
-    "precommit": "tsc -p . --noEmit"
+    "prepush": "tsc -p . --noEmit && yarn test"
   },
   "devDependencies": {
     "@types/jest": "^19.2.3",
