@@ -18,10 +18,8 @@
     "prepush": "tsc -p . --noEmit && yarn test"
   },
   "devDependencies": {
-    "@types/inquirer": "^0.0.34",
     "@types/jest": "^19.2.3",
     "@types/node": "^7.0.18",
-    "@types/yargs": "^6.6.0",
     "husky": "^0.13.3",
     "jest": "^19.0.2",
     "nodemon": "^1.11.0",
@@ -30,9 +28,7 @@
     "typescript": "^2.3.2"
   },
   "dependencies": {
-    "inquirer": "^3.0.6",
-    "pkg-up": "^2.0.0",
-    "yargs": "^8.0.1"
+    "pkg-up": "^2.0.0"
   },
   "jest": {
     "transform": {
