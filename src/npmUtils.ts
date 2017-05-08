@@ -63,3 +63,16 @@ export const isYarnInstalled = () => {
 export const shouldUseYarn = (projectPath: string) => (
   fs.existsSync(path.join(projectPath, 'yarn.lock')) && isYarnInstalled()
 );
+
+export const moduleHasTypings = (modulePath: string) => {
+  if (fs.existsSync(path.join(modulePath, 'index.d.ts'))) {
+    return true;
+  }
+  const pkgPath = path.join(modulePath, 'package.json');
+  if (!fs.existsSync(pkgPath)) {
+    console.log(pkgPath);
+    return false;
+  }
+  const pkg = require(pkgPath);
+  return !!(pkg.types || pkg.typings);
+}

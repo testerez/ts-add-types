@@ -5,6 +5,7 @@ import {
   getDependencies,
   packageExists,
   installPackages,
+  moduleHasTypings,
 } from './npmUtils';
 import * as path from 'path';
 import * as yargs from 'yargs';
@@ -20,8 +21,8 @@ const argv = yargs
   .help('h')
   .argv;
 
-const pkgBlackList = new Set([
-  '@types/typescript',
+const pkgBlackList = new Set<string>([
+  // place here some modules that should be skipped
 ]);
 
 const confirm = (message: string, def: boolean) => (
@@ -43,6 +44,7 @@ function printList(items: string[], indent: string) {
   const dependancies = getDependencies(require(pkgPath));
   let typePkgs = dependancies
     .filter(dep => !/^@types\//.test(dep))
+    .filter(dep => !moduleHasTypings(path.join(projectPath, 'node_modules', dep)))
     .map(dep => `@types/${dep}`)
     .filter(dep => dependancies.indexOf(dep) < 0)
     .filter(dep => !pkgBlackList.has(dep));
