@@ -55,7 +55,7 @@ function printList(items: string[], indent: string) {
   if (!typePkgs.length) {
     return;
   }
-  if (!argv.f) {
+  if (!argv.force) {
     console.log(`${typePkgs.length} typing(s) found:`)
     printList(typePkgs, '    ');
 
@@ -66,4 +66,5 @@ function printList(items: string[], indent: string) {
   installPackages(typePkgs, projectPath, argv.dev);
 })().catch((error: any) => {
   console.error('Error:', error);
+  process.exit(1);  
 })
