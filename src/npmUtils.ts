@@ -10,10 +10,20 @@ export const getDependencies = (packageJson: any) => (
   })
 );
 
-export const installPackages = (packages: string[], projectPath: string) => {
+export const installPackages = (
+  packages: string[],
+  projectPath: string,
+  dev: boolean
+) => {
   const useYarn = shouldUseYarn(projectPath);
+  const command = [
+    useYarn ? 'yarn add' : 'npm i',
+    dev && '-D',
+    ...packages,
+  ].filter(s => s).join(' ');
+  console.log(`$ ${command}`);
   childProcess.execSync(
-    `${useYarn ? 'yarn add' : 'npm i'} ${packages.join(' ')}`,
+    command,
     { stdio: [0, 1, 2], cwd: projectPath },
   );
 }

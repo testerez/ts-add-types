@@ -7,3 +7,11 @@ npm i -g ts-add-types
 # then just run
 ts-add-types
 ```
+
+## Options
+```
+Options:
+  --force, -f  install found typings without prompting
+  --dev, -D    install typings as dev dependancies
+  -h           Show help                                               [boolean]
+```
